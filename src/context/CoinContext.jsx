@@ -1,7 +1,10 @@
+// CoinContext banane ke liye import
 import { createContext, useEffect, useState } from "react";
 
+// Context create kiya
 export const CoinContext = createContext();
 
+// Provider component
 const CoinContextProvider = (props) => {
   const [allCoins, setAllCoins] = useState([]);
   const [currency, setCurrency] = useState({
@@ -9,14 +12,17 @@ const CoinContextProvider = (props) => {
     symbol: "$",
   });
 
+  // Coin data fetch karne wala function
   const fetchAllCoin = async () => {
+    // API call options
     const options = {
       method: "GET",
       headers: {
         accept: "application/json",
-        "x-cg-demo-api-key": "	CG-VG4K5ie9paJGe4nPaB2jRNqm",
+        "x-cg-demo-api-key": "	CG-VG4K5ie9paJGe4nPaB2jRNqm", // API key
       },
     };
+
 
     fetch(
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.name}`,
@@ -27,6 +33,7 @@ const CoinContextProvider = (props) => {
       .catch((err) => console.error(err));
   };
 
+  // Currency change hone par fetch call
   useEffect(() => {
     fetchAllCoin();
   }, [currency]);
@@ -37,6 +44,7 @@ const CoinContextProvider = (props) => {
     setCurrency,
   };
 
+  // Children ko context wrap karke return
   return (
     <CoinContext.Provider value={contextValue}>
       {props.children}

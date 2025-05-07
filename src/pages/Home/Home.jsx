@@ -1,44 +1,55 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./Home.css";
-import { CoinContext } from "../../context/CoinContext";
-import { Link } from "react-router-dom";
+import "./Home.css"; 
+import { CoinContext } from "../../context/CoinContext"; 
+import { Link } from "react-router-dom"; 
 
 const Home = () => {
+  // Access global coin data and currency symbol from context
   const { allCoins, currency } = useContext(CoinContext);
+
   const [displayCoins, setDisplayCoins] = useState([]);
   const [input, setInput] = useState("");
 
+  // Handle typing in the search input
   const inputHandler = (e) => {
     setInput(e.target.value);
+
+    // If input is cleared, show all coins again
     if (e.target.value === "") {
       setDisplayCoins(allCoins);
     }
   };
 
+  // Handle search karne ke liye
   const searchHandler = async (e) => {
     e.preventDefault();
-    const coins = await allCoins.filter((coin) => {
-      return coin.name.toLowerCase().includes(input.toLowerCase());
-    });
+
+    // Filter coins based on name 
+    const coins = await allCoins.filter((coin) =>
+      coin.name.toLowerCase().includes(input.toLowerCase())
+    );
+
     setDisplayCoins(coins);
   };
 
+  // On initial load or when allCoins updates, set displayCoins
   useEffect(() => {
     setDisplayCoins(allCoins);
   }, [allCoins]);
 
   return (
     <div className="home">
+      {/* Hero Section */}
       <div className="hero">
         <h1>
           Largest <br />
-          Crypto Marketplace
+          The Crypto Nexus
         </h1>
         <p>
-          Welcome to the world's largest cryptocurrency price tracker, where you
-          can explore real-time market data and analyse trends across thousands
-          of digital assets.
+        Enter the ultimate hub for real-time crypto intel — track, analyze, and conquer the digital economy.
         </p>
+
+        {/* Search Form */}
         <form onSubmit={searchHandler}>
           <input
             onChange={inputHandler}
@@ -49,6 +60,7 @@ const Home = () => {
             required
           />
 
+          {/* Datalist for auto-suggestions */}
           <datalist id="coinlist">
             {allCoins.map((coin, index) => (
               <option key={index} value={coin.name} />
@@ -58,7 +70,10 @@ const Home = () => {
           <button type="submit">Search</button>
         </form>
       </div>
+
+      {/* Crypto Table */}
       <div className="crypto-table">
+        {/* Table Header Row */}
         <div className="table-layout">
           <p>#</p>
           <p>Coins</p>
@@ -66,6 +81,8 @@ const Home = () => {
           <p style={{ textAlign: "center" }}>24H Change</p>
           <p className="market-cap">Market Cap</p>
         </div>
+
+        {/* Display top 10 filtered coins */}
         {displayCoins.slice(0, 10).map((coin, index) => (
           <Link to={`./coin/${coin.id}`} className="table-layout" key={index}>
             <p>{coin.market_cap_rank}</p>
@@ -77,7 +94,9 @@ const Home = () => {
               {currency.symbol} {coin.current_price.toLocaleString()}
             </p>
             <p
-              className={coin.price_change_percentage_24h > 0 ? "green" : "red"}
+              className={
+                coin.price_change_percentage_24h > 0 ? "green" : "red"
+              }
             >
               {Math.floor(coin.price_change_percentage_24h * 100) / 100}
             </p>
@@ -91,4 +110,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home; 
