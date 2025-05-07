@@ -4,7 +4,7 @@ import "./Footer.css";
 const Footer = () => {
   return (
     <div className="footer">
-      <p>Copyright @ 2025, Cryptoplace - All Rights Reserved.</p>
+      <p>Copyright @ 2025, CryptoPulse X Tracker - All Rights Reserved.</p>
     </div>
   );
 };
